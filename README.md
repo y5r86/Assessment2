@@ -4,7 +4,6 @@
 
 A simple Tic Tac Toe game written in Python, structured using multiple modules for clarity and maintainability.
 
----
 
 ## 🚀 How to Run
 
