@@ -6,8 +6,10 @@ from Player import Player
 class Game:
     def __init__(self):
         self.board = Board()
-        self.player1 = Player("Player 1", "X")
-        self.player2 = Player("Player 2", "O")
+        player1_name= input("Please enter the name of player 1 (playing X): ")
+        player2_name= input("Please enter the name of player 2 (playing O): ")
+        self.player1 = Player(player1_name, "X")
+        self.player2 = Player(player2_name, "O")
         self.current_player = self.player1
 
     def switch_player(self):
