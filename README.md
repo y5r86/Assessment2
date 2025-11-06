@@ -19,14 +19,6 @@ python GUI.py
 ## 🎯 How to Play
 
 - The game is for two players.
-- The board layout is as follows:
-
-   |   |  
----|---|---
-   |   |  
----|---|---
-   |   |  
-
 - The Players are just required to click on the block in order to place the mark (X/O)
 - The first player to align **three of their symbols** horizontally, vertically, or diagonally wins.
 - If all cells are filled without a winner, the game ends in a **draw**.
