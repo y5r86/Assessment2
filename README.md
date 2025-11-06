@@ -1,10 +1,9 @@
 # Assessment2 Harris Aamir (25030826)
 
-# 🎮 Tic Tac Toe (CLI Version)
+# 🎮 Tic Tac Toe (GUI Version)
 
-A simple command-line Tic Tac Toe game written in Python, structured using multiple modules for clarity and maintainability.
+A simple Tic Tac Toe game written in Python, structured using multiple modules for clarity and maintainability.
 
----
 
 ## 🚀 How to Run
 
@@ -13,21 +12,21 @@ A simple command-line Tic Tac Toe game written in Python, structured using multi
 ```bash
 git clone https://github.com/y5r86/Assessment2.git
 cd Assessment2
-python main.py
+git checkout GUI
+python GUI.py
 ```
 
 ## 🎯 How to Play
 
 - The game is for two players.
-- You can add the names of the player.
-- Players take turns entering a number from **1 to 9** to place their symbol on the board.
-- The board layout is mapped to the number keys as follows:
+- The board layout is as follows:
 
- 1 | 2 | 3
+   |   |  
 ---|---|---
- 4 | 5 | 6
+   |   |  
 ---|---|---
- 7 | 8 | 9
+   |   |  
 
+- The Players are just required to click on the block in order to place the mark (X/O)
 - The first player to align **three of their symbols** horizontally, vertically, or diagonally wins.
 - If all cells are filled without a winner, the game ends in a **draw**.
