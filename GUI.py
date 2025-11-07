@@ -13,7 +13,9 @@ class TicTacToeGUI:
         self.current_player = "X"
         self.board = [' ' for _ in range(9)]
         self.buttons = []
-        self.play_with_bot = False  # Flag to know if bot is enabled
+
+        # Add a flag to determine if Player 2 is a bot
+        self.bot_enabled = True  # Set to True for Bot, or adjust as you like
 
         # Show start screen first
         self.show_start_screen()
@@ -31,9 +33,9 @@ class TicTacToeGUI:
         self.player2_entry = tk.Entry(self.start_frame, font=("Arial", 12))
         self.player2_entry.grid(row=1, column=1, pady=5)
 
-        # Checkbox for bot mode
-        self.bot_var = tk.BooleanVar()
-        bot_checkbox = tk.Checkbutton(self.start_frame, text="Play vs Bot", variable=self.bot_var, font=("Arial", 12))
+        # Bot checkbox
+        self.bot_var = tk.IntVar(value=1)
+        bot_checkbox = tk.Checkbutton(self.start_frame, text="Play against Bot (O)", variable=self.bot_var)
         bot_checkbox.grid(row=2, column=0, columnspan=2, pady=5)
 
         start_button = tk.Button(self.start_frame, text="Start Game", font=("Arial", 12), command=self.start_game)
@@ -43,10 +45,7 @@ class TicTacToeGUI:
         """Initialize the game after players enter their names."""
         self.player1 = self.player1_entry.get().strip() or "Player 1"
         self.player2 = self.player2_entry.get().strip() or "Player 2"
-        self.play_with_bot = self.bot_var.get()
-
-        if self.play_with_bot:
-            self.player2 = "Bot"
+        self.bot_enabled = self.bot_var.get() == 1
 
         # Hide start screen
         self.start_frame.destroy()
@@ -60,6 +59,10 @@ class TicTacToeGUI:
         self.restart_button = tk.Button(self.root, text="Restart", font=("Arial", 12), command=self.reset_game)
         self.restart_button.grid(row=4, column=0, columnspan=3, pady=10)
 
+        # If bot starts and is O, do nothing; otherwise, if bot is X and player2 is bot, start with bot
+        if self.current_player == "O" and self.bot_enabled:
+            self.root.after(500, self.perform_bot_move)  # Extra handling if bot is X, not needed here
+
     def create_board(self):
         """Create the 3x3 board buttons."""
         for i in range(9):
@@ -69,8 +72,11 @@ class TicTacToeGUI:
             self.buttons.append(button)
 
     def make_move(self, index):
-        """Handle player or bot move."""
-        if self.board[index] == ' ':
+        # Human move only
+        if self.board[index] == ' ' and (
+            (self.current_player == "X") or
+            (self.current_player == "O" and not self.bot_enabled)
+        ):
             self.board[index] = self.current_player
             self.buttons[index].config(text=self.current_player)
 
@@ -78,31 +84,38 @@ class TicTacToeGUI:
                 winner = self.player1 if self.current_player == "X" else self.player2
                 self.status_label.config(text=f"{winner} ({self.current_player}) wins!")
                 self.disable_buttons()
-                return
             elif ' ' not in self.board:
                 self.status_label.config(text="It's a draw!")
-                return
-
-            # Switch player
-            self.current_player = 'O' if self.current_player == 'X' else 'X'
-
-            # If bot is playing and it's bot's turn, make bot move automatically
-            if self.play_with_bot and self.current_player == 'O':
-                self.root.after(500, self.bot_move)  # Delay for realism
             else:
-                next_player = self.player1 if self.current_player == "X" else self.player2
-                self.status_label.config(text=f"{next_player}'s ({self.current_player}) turn")
+                self.current_player = 'O' if self.current_player == 'X' else 'X'
+                # Change status: indicate bot is thinking instead of always showing Player 2 name
+                if self.bot_enabled and self.current_player == "O":
+                    self.status_label.config(text="Bot is thinking...")
+                    self.root.after(800, self.perform_bot_move)
+                else:
+                    next_player = self.player1 if self.current_player == "X" else self.player2
+                    self.status_label.config(text=f"{next_player}'s ({self.current_player}) turn")
 
-    def bot_move(self):
-        """Bot makes a random valid move."""
-        available_moves = [i for i, spot in enumerate(self.board) if spot == ' ']
-        if not available_moves:
+    def perform_bot_move(self):
+        available_moves = [i for i, mark in enumerate(self.board) if mark == ' ']
+        if not available_moves or self.current_player != "O":
             return
         move = random.choice(available_moves)
-        self.make_move(move)
+        self.board[move] = self.current_player
+        self.buttons[move].config(text=self.current_player)
+
+        if self.check_winner(self.current_player):
+            winner = self.player1 if self.current_player == "X" else self.player2
+            self.status_label.config(text=f"{winner} ({self.current_player}) wins!")
+            self.disable_buttons()
+        elif ' ' not in self.board:
+            self.status_label.config(text="It's a draw!")
+        else:
+            self.current_player = 'X'
+            # Always player 1's turn after bot
+            self.status_label.config(text=f"{self.player1}'s (X) turn")
 
     def check_winner(self, symbol):
-        """Check if a player has won."""
         win_conditions = [
             [0,1,2], [3,4,5], [6,7,8],
             [0,3,6], [1,4,7], [2,5,8],
@@ -115,12 +128,12 @@ class TicTacToeGUI:
             button.config(state=tk.DISABLED)
 
     def reset_game(self):
-        """Reset the game board while keeping player info."""
         self.board = [' ' for _ in range(9)]
         self.current_player = "X"
         self.status_label.config(text=f"{self.player1}'s (X) turn")
         for button in self.buttons:
             button.config(text=' ', state=tk.NORMAL)
+        # Bot may start as O, so nothing extra needed
 
 if __name__ == "__main__":
     root = tk.Tk()
