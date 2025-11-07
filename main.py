@@ -1,7 +1,7 @@
 # main.py
 
-from Game import Game
-
+from GUI import TicTacToeGUI
 if __name__ == "__main__":
-    game = Game()
-    game.play()
+    root = tk.Tk()
+    game = TicTacToeGUI(root)
+    root.mainloop()
