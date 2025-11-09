@@ -169,8 +169,11 @@ class TicTacToeGUI:
         for button in self.buttons:
             button.config(text=' ', state=tk.NORMAL)
 
-if __name__ == "__main__":
+def main():
     root = tk.Tk()
     root.configure(bg="#222831")
     game = TicTacToeGUI(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    main()
