@@ -1,3 +1,4 @@
+#I acknowledge the use of CHATGPT-5 (https://chatgpt.com/) to create the code of this file
 # player.py
 
 class Player:

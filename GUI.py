@@ -1,3 +1,4 @@
+#I acknowledge the use of CHATGPT-5 (https://chatgpt.com/) to create the code of this file
 import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk  # Pillow library for image handling
