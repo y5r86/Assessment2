@@ -1,4 +1,3 @@
-#I acknowledge the use of CHATGPT-5 (https://chatgpt.com/) to create the code of this file 
 # board.py
 
 class Board:
